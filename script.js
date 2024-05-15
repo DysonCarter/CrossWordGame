@@ -53,10 +53,18 @@ function getNextIndex(index) {
 function getPreviousIndex(index) {
     if (toggle) {
         // Move horizontally
-        return index - 1;
+        if(index === 0)
+            return 24;
+        else
+            return index - 1;
     } else {
         // Move vertically
-        return index - 5;
+        if(index === 0)
+            return 24;
+        else if(index >= 5)
+            return index - 5;
+        else
+            return index+19;
     }
 }
 
