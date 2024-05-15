@@ -1,51 +1,76 @@
 // Get all cells
 const cells = document.querySelectorAll('.cell');
 
-var toggle = true;
+let toggle = true;
 
-cells.forEach(cell => {
-    cell.setAttribute('tabindex', '0');
+// Function to update colors based on toggle state
+function updateColors(index) {
+    const rowStart = Math.floor(index / 5) * 5;
+    const rowEnd = rowStart + 4;
 
-    // On Click for each cell
-    cell.addEventListener('click', function() {
-        // Get Consts
-        const index = parseInt(this.getAttribute('data-index'));
-        const rowStart = Math.floor((index) / 5) * 5;
-        const rowEnd = rowStart + 4;
-
-        // Handle toggling
-        if(this.style.backgroundColor == 'yellow'){
-            toggle = !toggle;
-        }
-        
-        // Handle color change
-        if (toggle == true) {
-            cells.forEach(c => {
-                const cIndex = parseInt(c.getAttribute('data-index'));
-                if (cIndex >= rowStart && cIndex <= rowEnd) {
-                c.style.backgroundColor = 'grey';
-                } else {
-                c.style.backgroundColor = 'white';
-                }
-            });
-            this.style.backgroundColor = 'yellow';
+    cells.forEach(cell => {
+        const cellIndex = parseInt(cell.getAttribute('data-index'));
+        if (toggle) {
+            // Row highlighting
+            if (cellIndex >= rowStart && cellIndex <= rowEnd) {
+                cell.style.backgroundColor = 'grey';
+            } else {
+                cell.style.backgroundColor = 'white';
+            }
         } else {
-            cells.forEach(c => {
-                const cIndex = parseInt(c.getAttribute('data-index'));
-                if (cIndex % 5 === index % 5) {
-                c.style.backgroundColor = 'grey';
-                } else {
-                c.style.backgroundColor = 'white';
-                }
-            });
-            this.style.backgroundColor = 'yellow';
+            // Column highlighting
+            if (cellIndex % 5 === index % 5) {
+                cell.style.backgroundColor = 'grey';
+            } else {
+                cell.style.backgroundColor = 'white';
+            }
         }
     });
 
-    //For Pressing Keys
-    cell.addEventListener("keydown", function(event){
+    cells[index].style.backgroundColor = 'yellow';
+}
+
+// Function to get the next cell index
+function getNextIndex(index) {
+    if (toggle) {
+        // Move horizontally
+        return index + 1;
+    } else {
+        // Move vertically
+        return index + 5;
+    }
+}
+
+// Function to move focus to the next cell
+function moveToNextCell(currentIndex) {
+    const nextIndex = getNextIndex(currentIndex);
+
+    // Check if the next cell is within bounds
+    if (nextIndex < cells.length) {
+        cells[nextIndex].focus();
+    }
+}
+
+cells.forEach((cell, index) => {
+    cell.setAttribute('tabindex', '0');
+
+    // On Click for each cell
+    cell.addEventListener('click', function () {
+        if (this.style.backgroundColor === 'yellow') {
+            toggle = !toggle;
+        }
+        updateColors(index);
+    });
+
+    // For Pressing Keys
+    cell.addEventListener("keydown", function (event) {
         const key = event.key;
-        if(key.length === 1)
+
+        if (key.length === 1) {
             this.innerHTML = key.toUpperCase();
-    })
+
+            updateColors(index);
+            moveToNextCell(index);
+        }
+    });
 });
