@@ -41,6 +41,17 @@ function getNextIndex(index) {
     }
 }
 
+// Function to get the previous cell index
+function getPreviousIndex(index) {
+    if (toggle) {
+        // Move horizontally
+        return index - 1;
+    } else {
+        // Move vertically
+        return index - 5;
+    }
+}
+
 // Function to move focus to the next cell
 function moveToNextCell(currentIndex) {
     const nextIndex = getNextIndex(currentIndex);
@@ -48,6 +59,16 @@ function moveToNextCell(currentIndex) {
     // Check if the next cell is within bounds
     if (nextIndex < cells.length) {
         cells[nextIndex].focus();
+    }
+}
+
+// Function to move focus to the previous cell
+function moveToPreviousCell(currentIndex) {
+    const prevIndex = getPreviousIndex(currentIndex);
+
+    // Check if the next cell is within bounds
+    if (prevIndex < cells.length) {
+        cells[prevIndex].focus();
     }
 }
 
@@ -69,8 +90,15 @@ cells.forEach((cell, index) => {
         if (key.length === 1) {
             this.innerHTML = key.toUpperCase();
 
-            updateColors(index);
+            updateColors(getNextIndex(index));
             moveToNextCell(index);
+        }
+
+        if (key === "Backspace"){
+            this.innerHTML = '';
+
+            updateColors(getPreviousIndex(index));
+            moveToPreviousCell(index);
         }
     });
 });
