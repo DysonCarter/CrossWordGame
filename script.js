@@ -34,10 +34,18 @@ function updateColors(index) {
 function getNextIndex(index) {
     if (toggle) {
         // Move horizontally
-        return index + 1;
+        if(index === 24)
+            return 0;
+        else
+            return index + 1;
     } else {
         // Move vertically
-        return index + 5;
+        if(index === 24)
+            return 0;
+        else if(index <= 19)
+            return index + 5;
+        else
+            return index-19;
     }
 }
 
@@ -87,18 +95,22 @@ cells.forEach((cell, index) => {
     cell.addEventListener("keydown", function (event) {
         const key = event.key;
 
-        if (key.length === 1) {
+        if (key === " "){
+            if (this.style.backgroundColor === 'yellow') {
+                toggle = !toggle;
+            }
+            updateColors(index);
+        } else if (key.length === 1) {
             this.innerHTML = key.toUpperCase();
 
             updateColors(getNextIndex(index));
             moveToNextCell(index);
-        }
-
-        if (key === "Backspace"){
+        } else if (key === "Backspace"){
             this.innerHTML = '';
 
             updateColors(getPreviousIndex(index));
             moveToPreviousCell(index);
         }
+
     });
 });
