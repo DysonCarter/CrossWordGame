@@ -73,11 +73,3 @@ body {
     margin-top: -65vh;
     user-select: none;
 }
-
-p {
-    user-select: none;
-}
-
-h2 {
-    user-select: none;
-}

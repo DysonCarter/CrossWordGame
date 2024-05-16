@@ -1,4 +1,5 @@
 fillInBlack();
+makeClues();
 
 // Get all cells
 const cells = document.querySelectorAll('.cell');
@@ -28,6 +29,29 @@ async function checkAnswers() {
     }
 }
 
+// Gets the clues and puts them on the html
+async function makeClues(){
+    const response = await fetch('clues.txt');
+    const clues = await response.text();
+
+    clueContainer = document.querySelector(".clues")
+    clueContainer.innerHTML += "<h2>Across</h2><p>";
+    
+    for (let i = 0; i < clues.length; i++) {
+        if (clues[i] === '\n') {
+            if (clues[i + 1] === '\n') {
+                clueContainer.innerHTML += '</p><h2>Down</h2><p>';
+                i++; // Skip the extra newline
+            } else {
+                clueContainer.innerHTML += '<br>';
+            }
+        } else {
+            clueContainer.innerHTML += clues[i];
+        }
+    }
+
+    clueContainer.innerHTML += '</p>';
+}
 
 // '!' indicates a filled in space
 async function fillInBlack(){
