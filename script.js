@@ -1,7 +1,35 @@
 // Get all cells
 const cells = document.querySelectorAll('.cell');
 
+// true = horizontal, false = vertical
 let toggle = true;
+
+// Check the users answer
+async function checkAnswers() {
+    const response = await fetch('answer.txt');
+    const fileAnswer = await response.text();
+    let answers = '';
+    cells.forEach(cell => {
+        answers += cell.textContent;
+    });
+    console.log('Expected:', fileAnswer);
+    console.log('Actual:', answers);
+
+    if(fileAnswer === answers){
+        handleWin();
+    } else {
+        handleLoss();
+    }
+}
+
+function handleWin(){
+    
+}
+
+function handleLoss(){
+
+}
+
 
 // Function to update colors based on toggle state
 function updateColors(index) {
