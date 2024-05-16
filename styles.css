@@ -44,3 +44,12 @@ body {
     background-color: rgb(150, 150, 150);
     cursor: pointer;
 }
+
+.filled {
+    background-color: black;
+}
+
+.filled:hover {
+    background-color: black;
+    cursor: default;
+}
