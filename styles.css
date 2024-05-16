@@ -28,6 +28,10 @@
 body {
     background-color: rgb(73, 95, 101);
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    user-select: none;
+    -webkit-user-select: none; /* Chrome, Safari, Opera */
+      -moz-user-select: none; /* Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
 }
 
 .submit {
@@ -45,7 +49,7 @@ body {
     font-size: 2vh;
     margin-bottom: 6vh;
     margin-right:6vh;
-    position: fixed;
+    position: absolute;
     user-select: none;
 }
 
@@ -61,4 +65,19 @@ body {
 .filled:hover {
     background-color: black;
     cursor: default;
+}
+
+.clues {
+    position: inherit;
+    margin-left: 60vh;
+    margin-top: -65vh;
+    user-select: none;
+}
+
+p {
+    user-select: none;
+}
+
+h2 {
+    user-select: none;
 }
