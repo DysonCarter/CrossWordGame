@@ -5,6 +5,11 @@
     gap: 4vh;
 }
 
+h2 {
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+
 .cell {
     background-color: white;
     border-radius: 2vh;
@@ -35,13 +40,14 @@ body {
 }
 
 .submit {
+    position: inherit;
     width: 54vh;
     height: 10vh;
     border-radius: 2vh;
     border: 0px;
     font-weight: 500;
     font-size: 4vh;
-    margin-top: 4vh;
+    margin-top: 1vh;
     background-color: rgb(200,200,200);
 }
 
@@ -69,15 +75,26 @@ body {
 
 .clues {
     position: inherit;
-    margin-left: 60vh;
-    margin-top: -70vh;
     user-select: none;
     font-size: 3.5vh;
+    margin-left: 50px;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    height: 62.5vh;
+    border-radius: 10px;
 }
 
 .clues .clue {
     color: white;
     text-shadow: 1px 1px 10px white;
     font-size: 3vh;
-    visibility: hidden;
+    opacity: 0;
+    margin-bottom: 10px;
+}
+
+.gameContainer {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
 }

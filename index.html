@@ -7,6 +7,7 @@
     <title>Crossword Game</title>
 </head>
 <body>
+    <div class="gameContainer">
     <div class="crossword">
         <div class="cell" data-index="0"><div class="cellNumber"> </div></div>
         <div class="cell" data-index="1"><div class="cellNumber"> </div></div>
@@ -33,9 +34,10 @@
         <div class="cell" data-index="22"><div class="cellNumber"> </div></div>
         <div class="cell" data-index="23"><div class="cellNumber"> </div></div>
         <div class="cell" data-index="24"><div class="cellNumber"> </div></div>
+        <button class="submit" onclick="checkAnswers()">SUBMIT</button>
     </div>
-    <button class="submit" onclick="checkAnswers()">SUBMIT</button>
     <div class="clues"></div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>

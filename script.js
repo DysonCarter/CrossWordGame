@@ -3,10 +3,12 @@ makeClues();
 
 // Get all cells
 const cells = document.querySelectorAll('.cell');
+var clues;
 
 // true = horizontal, false = vertical
 let toggle = true;
 let clueCount = 0;
+let round = 0;
 
 // Check the users answer
 async function checkAnswers() {
@@ -45,20 +47,22 @@ async function makeClues() {
         const lines = clues.split('\n');
         let across = true;
 
-        clueContainer.innerHTML += "<h2>Across</h2>";
+        clueContainer.innerHTML += "<h2>Across:</h2>";
 
         lines.forEach(line => {
             if (line.trim() === '' && across) {
-                clueContainer.innerHTML += "<h2>Down</h2>";
+                clueContainer.innerHTML += "<h2>Down:</h2>";
                 across = false;
             } else if (line.trim() !== '') {
-                clueContainer.innerHTML += `<div class='clue'>${line}</div>`;
+                clueContainer.innerHTML += `<div class='clue' data-index="${clueCount}">${line}</div>`;
                 clueCount += 1;
             }
         });
     } catch (error) {
         console.error('Error fetching or processing clues:', error);
     }
+    clues = document.querySelectorAll('.clue');
+    handleLoss();
 }
 
 // '!' indicates a filled in space
@@ -94,7 +98,15 @@ function handleWin(){
 }
 
 function handleLoss(){
-    alert("WRONG!");
+    clues.forEach(clue => {
+        const clueIndex = parseInt(clue.getAttribute('data-index'));
+        if((clueIndex % 5) === round){
+            clue.style.transition = "opacity 0.5s ease-in";
+            clue.style.opacity = 1; 
+        }
+    })
+    if(round < 5)
+        round++;
 }
 
 
