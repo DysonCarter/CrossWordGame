@@ -12,26 +12,45 @@ async function checkAnswers() {
     const fileAnswer = await response.text();
     let answers = '';
     cells.forEach(cell => {
-        answers += cell.textContent;
+        cell.childNodes.forEach(child => {
+            if (child.nodeType === Node.TEXT_NODE) {
+                answers += child.textContent.trim();
+            }
+        });
     });
     console.log('Expected:', fileAnswer);
     console.log('Actual:', answers);
 
-    if(fileAnswer === answers){
+    if (fileAnswer === answers) {
         handleWin();
     } else {
         handleLoss();
     }
 }
 
+
+// '!' indicates a filled in space
 async function fillInBlack(){
+    let wordcount = 1;
     const response = await fetch('answer.txt');
     const fileAnswer = await response.text();
+
     cells.forEach(cell => {
         const cellIndex = parseInt(cell.getAttribute('data-index'));
+        const cellNumberDiv = cell.querySelector('.cellNumber');
+
+        //fill in
         if(fileAnswer[cellIndex] === '!'){
             cell.classList.toggle('filled');
             cell.innerHTML = '!';
+        } else {
+            //Put Square Numbers
+            if(cellIndex <= 4 || (cellIndex % 5) === 0 || fileAnswer[cellIndex-1] === '!'|| fileAnswer[cellIndex-5] === '!'){
+                if (cellNumberDiv) {
+                    cellNumberDiv.innerHTML = wordcount;
+                }
+                wordcount += 1;
+            }
         }
     });
 
@@ -39,11 +58,11 @@ async function fillInBlack(){
 }
 
 function handleWin(){
-
+    alert("CORRECT!");
 }
 
 function handleLoss(){
-
+    alert("WRONG!");
 }
 
 
@@ -174,24 +193,46 @@ function addEventListeners() {
             // For Pressing Keys
             cell.addEventListener("keydown", function (event) {
                 const key = event.key;
-
+                const cellNumberDiv = this.querySelector('.cellNumber');
+                
                 if (key === " ") {
                     if (this.style.backgroundColor === 'yellow') {
                         toggle = !toggle;
                     }
                     updateColors(index);
                 } else if (key.length === 1) {
-                    this.innerHTML = key.toUpperCase();
+                    // Create a text node for the character input
+                    const textNode = document.createTextNode(key.toUpperCase());
+                    
+                    // Clear existing text nodes (not cell number)
+                    this.childNodes.forEach(child => {
+                        if (child.nodeType === Node.TEXT_NODE) {
+                            this.removeChild(child);
+                        }
+                    });
+
+                    // Append the new text node
+                    this.appendChild(textNode);
+
+                    // Ensure the cell number div stays at the top
+                    if (cellNumberDiv) {
+                        this.appendChild(cellNumberDiv);
+                    }
 
                     updateColors(getNextIndex(index));
                     moveToNextCell(index);
                 } else if (key === "Backspace") {
-                    this.innerHTML = '';
+                    // Clear existing text nodes (not cell number)
+                    this.childNodes.forEach(child => {
+                        if (child.nodeType === Node.TEXT_NODE) {
+                            this.removeChild(child);
+                        }
+                    });
 
                     updateColors(getPreviousIndex(index));
                     moveToPreviousCell(index);
                 }
             });
         }
-    })
+    });
 }
