@@ -13,14 +13,14 @@ function updateColors(index) {
         if (toggle) {
             // Row highlighting
             if (cellIndex >= rowStart && cellIndex <= rowEnd) {
-                cell.style.backgroundColor = 'grey';
+                cell.style.backgroundColor = 'rgb(187, 220, 202)';
             } else {
                 cell.style.backgroundColor = 'white';
             }
         } else {
             // Column highlighting
             if (cellIndex % 5 === index % 5) {
-                cell.style.backgroundColor = 'grey';
+                cell.style.backgroundColor = 'rgb(187, 220, 202)';
             } else {
                 cell.style.backgroundColor = 'white';
             }
