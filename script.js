@@ -6,6 +6,7 @@ const cells = document.querySelectorAll('.cell');
 
 // true = horizontal, false = vertical
 let toggle = true;
+let clueCount = 0;
 
 // Check the users answer
 async function checkAnswers() {
@@ -30,27 +31,34 @@ async function checkAnswers() {
 }
 
 // Gets the clues and puts them on the html
-async function makeClues(){
-    const response = await fetch('clues.txt');
-    const clues = await response.text();
+async function makeClues() {
+    try {
+        const response = await fetch('clues.txt');
+        const clues = await response.text();
 
-    clueContainer = document.querySelector(".clues")
-    clueContainer.innerHTML += "<h2>Across</h2><p>";
-    
-    for (let i = 0; i < clues.length; i++) {
-        if (clues[i] === '\n') {
-            if (clues[i + 1] === '\n') {
-                clueContainer.innerHTML += '</p><h2>Down</h2><p>';
-                i++; // Skip the extra newline
-            } else {
-                clueContainer.innerHTML += '<br>';
-            }
-        } else {
-            clueContainer.innerHTML += clues[i];
+        const clueContainer = document.querySelector(".clues");
+        if (!clueContainer) {
+            console.error("Clue container not found!");
+            return;
         }
-    }
 
-    clueContainer.innerHTML += '</p>';
+        const lines = clues.split('\n');
+        let across = true;
+
+        clueContainer.innerHTML += "<h2>Across</h2>";
+
+        lines.forEach(line => {
+            if (line.trim() === '' && across) {
+                clueContainer.innerHTML += "<h2>Down</h2>";
+                across = false;
+            } else if (line.trim() !== '') {
+                clueContainer.innerHTML += `<div class='clue'>${line}</div>`;
+                clueCount += 1;
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching or processing clues:', error);
+    }
 }
 
 // '!' indicates a filled in space
@@ -142,6 +150,8 @@ function getNextIndex(index) {
         while(cells[nextIndex].classList.contains('filled')){
             if (nextIndex <= 19) {
                 nextIndex = (nextIndex + 5) % 25;
+            } else if (nextIndex == 24) {
+                nextIndex = 0;
             } else {
                 nextIndex = nextIndex - 19;
             }
