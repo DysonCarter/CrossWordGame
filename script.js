@@ -250,17 +250,14 @@ function isMobileDevice() {
 }
 
 function addEventListeners() {
-    const inputElement = document.createElement('input');
-    inputElement.style.position = 'absolute';
-    inputElement.style.opacity = '0';
-    inputElement.style.height = '0';
-    inputElement.style.width = '0';
-    inputElement.style.border = 'none';
-    document.body.appendChild(inputElement);
-
     cells.forEach((cell, index) => {
         if (!cell.classList.contains('filled')) {
             cell.setAttribute('tabindex', '0');
+            
+            // Set contenteditable for mobile devices
+            if (isMobileDevice()) {
+                cell.setAttribute('contenteditable', 'true');
+            }
 
             // On Click for each cell
             cell.addEventListener('click', function () {
@@ -268,10 +265,9 @@ function addEventListeners() {
                     toggle = !toggle;
                 }
                 updateColors(index);
+                this.focus(); // Focus the cell itself for both desktop and mobile
                 if (isMobileDevice()) {
-                    inputElement.focus();  // Focus the input element to show the keyboard on mobile
-                } else {
-                    cell.focus(); // Focus the cell itself for desktop
+                    this.setAttribute('contenteditable', 'true'); // Ensure contenteditable is true on click for mobile
                 }
             });
 
@@ -281,11 +277,13 @@ function addEventListeners() {
                 const cellNumberDiv = this.querySelector('.cellNumber');
 
                 if (key === " ") {
+                    event.preventDefault(); // Prevent adding a space
                     if (this.style.backgroundColor === 'yellow') {
                         toggle = !toggle;
                     }
                     updateColors(index);
                 } else if (key.length === 1) {
+                    event.preventDefault(); // Prevent adding the key to the cell
                     // Create a text node for the character input
                     const textNode = document.createTextNode(key.toUpperCase());
 
@@ -307,6 +305,7 @@ function addEventListeners() {
                     updateColors(getNextIndex(index));
                     moveToNextCell(index);
                 } else if (key === "Backspace") {
+                    event.preventDefault(); // Prevent default backspace behavior
                     // Clear existing text nodes (not cell number)
                     this.childNodes.forEach(child => {
                         if (child.nodeType === Node.TEXT_NODE) {
@@ -333,6 +332,21 @@ function addEventListeners() {
                     updateColors(getNextIndex(index));
                     moveToNextCell(index);
                 }
+                
+                // Remove contenteditable to hide the caret
+                this.setAttribute('contenteditable', 'false');
+            });
+
+            // Remove blinking caret on focus
+            cell.addEventListener('focus', function () {
+                // Temporarily set contenteditable to false to remove caret
+                this.setAttribute('contenteditable', 'false');
+                // Restore contenteditable after a slight delay to avoid caret blinking
+                setTimeout(() => {
+                    if (isMobileDevice()) {
+                        this.setAttribute('contenteditable', 'true');
+                    }
+                }, 0);
             });
         }
     });

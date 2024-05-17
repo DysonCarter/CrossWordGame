@@ -24,6 +24,12 @@ h2 {
     font-weight: 500;
     font-size: 5vh;
     user-select: none;
+    outline: none;
+    user-select: none
+}
+
+.cell::selection {
+    background: transparent; 
 }
 
 .cell:hover {
