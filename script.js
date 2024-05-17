@@ -102,7 +102,19 @@ async function fillInBlack(){
 }
 
 function handleWin(){
-    alert("CORRECT!");
+    if(round === 1)
+        alert(`Congrats you got it in ${round} try!`);
+    else
+        alert(`Congrats you got it in ${round} tries!`);
+
+    clues.forEach(clue => {
+        clue.style.transition = "opacity 0.5s ease-in";
+        clue.style.opacity = 1; 
+    })
+    document.body.style.backgroundColor = "rgb(25,175,70)";
+    setTimeout(() => {
+        document.body.style.backgroundColor = "rgb(73, 95, 101)";
+    }, 750);
 }
 
 function handleLoss(){
@@ -117,8 +129,7 @@ function handleLoss(){
             clue.style.opacity = 1; 
         }
     })
-    if(round < 5)
-        round++;
+    round++;
 }
 
 // Function to update colors based on toggle state
