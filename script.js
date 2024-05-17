@@ -62,7 +62,15 @@ async function makeClues() {
         console.error('Error fetching or processing clues:', error);
     }
     clues = document.querySelectorAll('.clue');
-    handleLoss();
+    clues.forEach(clue => {
+        const clueIndex = parseInt(clue.getAttribute('data-index'));
+        if((clueIndex % 5) === round){
+            clue.style.transition = "opacity 0.5s ease-in";
+            clue.style.opacity = 1; 
+        }
+    })
+    if(round < 5)
+        round++;
 }
 
 // '!' indicates a filled in space
@@ -98,6 +106,10 @@ function handleWin(){
 }
 
 function handleLoss(){
+    document.body.style.backgroundColor = "rgb(180,25,25)";
+    setTimeout(() => {
+        document.body.style.backgroundColor = "rgb(73, 95, 101)";
+    }, 750);
     clues.forEach(clue => {
         const clueIndex = parseInt(clue.getAttribute('data-index'));
         if((clueIndex % 5) === round){
@@ -108,7 +120,6 @@ function handleLoss(){
     if(round < 5)
         round++;
 }
-
 
 // Function to update colors based on toggle state
 function updateColors(index) {
@@ -277,6 +288,22 @@ function addEventListeners() {
 
                     updateColors(getPreviousIndex(index));
                     moveToPreviousCell(index);
+                } else if (key === "ArrowLeft") {
+                    toggle = true;
+                    updateColors(getPreviousIndex(index));
+                    moveToPreviousCell(index);
+                } else if (key === "ArrowRight") {
+                    toggle = true;
+                    updateColors(getNextIndex(index));
+                    moveToNextCell(index);
+                } else if (key === "ArrowUp") {
+                    toggle = false;
+                    updateColors(getPreviousIndex(index));
+                    moveToPreviousCell(index);
+                } else if (key === "ArrowDown") {
+                    toggle = false;
+                    updateColors(getNextIndex(index));
+                    moveToNextCell(index);
                 }
             });
         }

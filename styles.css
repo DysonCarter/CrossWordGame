@@ -32,6 +32,8 @@ h2 {
 
 body {
     background-color: rgb(73, 95, 101);
+    transition: background-color 0.5s ease-in;
+    overflow: hidden;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     user-select: none;
     -webkit-user-select: none; /* Chrome, Safari, Opera */
