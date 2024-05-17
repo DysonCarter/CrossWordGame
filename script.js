@@ -245,7 +245,19 @@ function moveToPreviousCell(currentIndex) {
     }
 }
 
+function isMobileDevice() {
+    return /Mobi|Android/i.test(navigator.userAgent);
+}
+
 function addEventListeners() {
+    const inputElement = document.createElement('input');
+    inputElement.style.position = 'absolute';
+    inputElement.style.opacity = '0';
+    inputElement.style.height = '0';
+    inputElement.style.width = '0';
+    inputElement.style.border = 'none';
+    document.body.appendChild(inputElement);
+
     cells.forEach((cell, index) => {
         if (!cell.classList.contains('filled')) {
             cell.setAttribute('tabindex', '0');
@@ -256,13 +268,18 @@ function addEventListeners() {
                     toggle = !toggle;
                 }
                 updateColors(index);
+                if (isMobileDevice()) {
+                    inputElement.focus();  // Focus the input element to show the keyboard on mobile
+                } else {
+                    cell.focus(); // Focus the cell itself for desktop
+                }
             });
 
             // For Pressing Keys
             cell.addEventListener("keydown", function (event) {
                 const key = event.key;
                 const cellNumberDiv = this.querySelector('.cellNumber');
-                
+
                 if (key === " ") {
                     if (this.style.backgroundColor === 'yellow') {
                         toggle = !toggle;
@@ -271,7 +288,7 @@ function addEventListeners() {
                 } else if (key.length === 1) {
                     // Create a text node for the character input
                     const textNode = document.createTextNode(key.toUpperCase());
-                    
+
                     // Clear existing text nodes (not cell number)
                     this.childNodes.forEach(child => {
                         if (child.nodeType === Node.TEXT_NODE) {
